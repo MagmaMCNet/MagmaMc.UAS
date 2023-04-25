@@ -4,11 +4,11 @@ using System.Text;
 
 namespace MagmaMc.AUU
 {
-    static class PrivateStarter
+    class PrivateStarter: Global
     {
         private static void Main(string[] args)
         {
-
+            Console.WriteLine(CallAPI(APIEndPoints.UserData, (APIData)new UserData("testaccount", "testaccount")));
         }
     }
 }
