@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace MagmaMc.AUU
+namespace MagmaMc.UAA
 {
     /// <summary>
     /// Magma's Universal Accounts API Paths
@@ -18,9 +18,14 @@ namespace MagmaMc.AUU
     public readonly struct APIEndPoints
     {
         /// <summary>
+        /// The base URL of the Magma's Universal Accounts API. PROXY
+        /// </summary>
+        public const string APIPathProxy = "https://accounts.magma-mc.net/API/"; // proxy slower
+        /// <summary>
         /// The base URL of the Magma's Universal Accounts API.
         /// </summary>
-        public const string APIPath = "https://accounts.magma-mc.net/API/";
+        public const string APIPath = "http://www.magma-mc.net:5555/Accounts/API/"; // 
+
 
         /// <summary>
         /// The endpoint used for retrieving user data or validating the user.
@@ -42,12 +47,38 @@ namespace MagmaMc.AUU
         /// </summary>
         public const string Create = APIPath + "Create.php";
     }
-    public class APIData: Dictionary<string, string> { }
-    internal class Global
+    public class APIData: Dictionary<string, string>
     {
-        protected Global() { }
-        public const string APIPath = "https://accounts.magma-mc.net/API/";
+        public static explicit operator APIData(JsonElement Input)
+        {
 
+            APIData Data = new APIData
+            {
+                { "Username", Input.GetProperty("Username").ToString()  },
+                { "Password", Input.GetProperty("Password").ToString()  },
+                { "Email", Input.GetProperty("Email").ToString()  }
+            };
+            return Data;
+        }
+    }
+    public static class Extensions
+    {
+        /// <summary>
+        /// Converts A Stringed Json Into JsonElement
+        /// </summary>
+        /// <param name="Data"></param>
+        /// <returns></returns>
+        public static JsonElement Jsonify(this string Data)
+        {
+            return JsonSerializer.Deserialize<JsonElement>(Data);
+        }
+    }
+    /// <summary>
+    /// User Data Utils
+    /// </summary>
+    public class UDUtils
+    {
+        protected UDUtils() { }
         public static string ToQueryString(Dictionary<string, string> parameters)
         {
             if (parameters == null)
@@ -76,7 +107,8 @@ namespace MagmaMc.AUU
             else return null;
         }
 
-        public static UserData CreateJson(string Data)
+
+        public static UserData ToUserData(string Data)
         {
             try
             {
@@ -97,27 +129,6 @@ namespace MagmaMc.AUU
             
 
 
-        /// <summary>
-        /// A Quick Simple Way To Hash A String
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string md5(string input)
-        {
-            using (MD5 md5 = MD5.Create())
-            {
-                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-                StringBuilder sb = new StringBuilder();
-
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("x2"));
-                }
-
-                return sb.ToString();
-            }
-        }
 
         /// <summary>
         /// Removes <c><![CDATA[<script></script>]]></c> tags From HTML Returned Data

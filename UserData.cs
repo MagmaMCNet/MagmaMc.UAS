@@ -7,14 +7,14 @@ using System.Text.Json;
 using System.IO;
 using MagmaMc.MagmaSimpleConfig;
 using static MagmaMc.JEF.JEF;
-using static MagmaMc.AUU.Global;
+using static MagmaMc.UAA.UDUtils;
 
-namespace MagmaMc.AUU
+namespace MagmaMc.UAA
 {
-    public class IUserData
+    public abstract class IUserData
     {
-        public static string Filename { get; } = Utils.Folders.LocalUserAppData + "\\MagmaMc\\AUU\\Auth.db";
-        public static string Folder { get; } = Utils.Folders.LocalUserAppData + "\\MagmaMc\\AUU\\";
+        public static string Filename { get; } = Folder + "Auth.db";
+        public static string Folder { get; } = Utils.Folders.LocalUserAppData + "\\MagmaMc\\UAA\\";
         public string Username { get; set; }
         public string Email { get; set; }
         public string Icon { get; set; }
@@ -52,12 +52,29 @@ namespace MagmaMc.AUU
             Username = username;
             Password = password;
         }
-        public static bool ValidToken(string Token)
+        public UserData(string username, string password, string email)
         {
-            return true;
+            Username = username;
+            Password = password;
+            Email = email;
         }
+        public static bool ValidToken(string Token) =>
+            GetUserData(Token) != null;
+
+        public static string GetToken(APIData UserData) => 
+            CallAPI(APIEndPoints.Token, UserData);
+
+        public static UserData GetUserData(APIData UserData) => 
+            ToUserData(CallAPI(APIEndPoints.UserData, UserData));
+
+        public static UserData GetUserData(string Token) => 
+            ToUserData(CallAPI(APIEndPoints.UserData, new APIData() { { "Token", Token } }));
+
         public static UserData Read()
         {
+            if (!Directory.Exists(Folder))
+                Directory.CreateDirectory(Folder);
+
             SimpleConfig Data = new SimpleConfig(Filename);
             UserData UserData = new UserData();
             UserData.Username = Data.GetValue("Username", "", "Config").ToString();
@@ -72,7 +89,11 @@ namespace MagmaMc.AUU
         }
         public void Save()
         {
+            if (!Directory.Exists(Folder))
+                Directory.CreateDirectory(Folder);
+
             SimpleConfig Data = new SimpleConfig(Filename);
+            File.AppendAllText(Filename, "");
             File.AppendAllText(Filename, "[Config]\r\n// WARNING -- Do Not Share Your Authorisation Token -- WARNING\r\n");
             Data.SetValue("Authorisation", "", "Config");
             Data.SetValue("Username", Username, "Config");
@@ -80,7 +101,5 @@ namespace MagmaMc.AUU
             Data.SetValue("Icon", Icon, "Config");
         }
 
-
-        
     }
 }

@@ -12,7 +12,7 @@ Documenation Will Be Released With [ed653](#Updates) Update
 | Code Name | Name            | Completed             |
 | --------- | --------------- | --------------------- | 
 | 683c7     | Server Security | :white_check_mark:    |
-| 80e0e     | Client Security | :construction_worker: |
+| 80e0e     | Client Security | :white_check_mark:    |
 | ed653     | Custom UserData | :x:                   |
 | 96369     | Login Form      | :x:                   |
 | 5d242     | SignUp Form     | :x:                   |
