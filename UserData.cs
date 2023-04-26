@@ -32,17 +32,6 @@ namespace MagmaMc.UAA
             Data.Authorisation = CallAPI(APIEndPoints.Token, (APIData)Data);
             return Data;
         }
-        public static explicit operator APIData(IUserData UserData)
-        {
-            APIData Data = new APIData
-            {
-                { "Username", UserData.Username },
-                { "Password", UserData.Password },
-                { "Email", UserData.Email },
-                { "Token", UserData.Authorisation }
-            };
-            return Data;
-        }
     }
     public class UserData: IUserData
     {
@@ -58,9 +47,19 @@ namespace MagmaMc.UAA
             Password = password;
             Email = email;
         }
+        /// <summary>
+        /// Allows Comparing A Token And Checking if it is valid
+        /// </summary>
+        /// <param name="Token"></param>
+        /// <returns></returns>
         public static bool ValidToken(string Token) =>
             GetUserData(Token) != null;
 
+        /// <summary>
+        /// Generates A Token From UserData
+        /// </summary>
+        /// <param name="UserData"></param>
+        /// <returns></returns>
         public static string GetToken(APIData UserData) => 
             CallAPI(APIEndPoints.Token, UserData);
 
@@ -87,6 +86,30 @@ namespace MagmaMc.UAA
                 return null;
 
         }
+        /// <summary>
+        /// Gets the custom data for a given filename using the provided developer token and access token.
+        /// </summary>
+        /// <param name="DevToken">Developer token to use for authentication.</param>
+        /// <param name="Token">Access token to use for authentication.</param>
+        /// <param name="Filename">Name of the file to retrieve custom data for.</param>
+        /// <returns>A string containing the custom data for the specified file.</returns>
+        public static string GetCustomData(string DevToken, string Token, string Filename)
+        {
+            return CallAPI(APIEndPoints.CustomData, new APIData() { { "DevToken", DevToken }, { "Token", Token }, { "Filename", Filename } });
+        }
+
+        /// <summary>
+        /// Sets the custom data for a given filename using the provided developer token and access token.
+        /// </summary>
+        /// <param name="DevToken">Developer token to use for authentication.</param>
+        /// <param name="Token">Access token to use for authentication.</param>
+        /// <param name="Filename">Name of the file to set custom data for.</param>
+        /// <param name="Data">Custom data to set for the specified file.</param>
+        public static void SetCustomData(string DevToken, string Token, string Filename, string Data)
+        {
+            CallAPI(APIEndPoints.CustomData, new APIData() { { "DevToken", DevToken }, { "Token", Token }, { "Filename", Filename }, { "Data", Data } });
+        }
+        
         public void Save()
         {
             if (!Directory.Exists(Folder))
