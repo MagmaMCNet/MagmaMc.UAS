@@ -1,5 +1,5 @@
-# Magma's Universal Accounts Authenticator
-## MagmaMc.UUA
+# Magma's Universal Account System
+## MagmaMc.UAS
 a NuGet package Used For Creating Login And Storing UserData Securely
 
 originally made for private use but has been released to the public for use,
