@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using MagmaMc.UAA;
 
-namespace MagmaMc.UAA
+namespace MagmaMc.UAA.Test
 {
-    class PrivateStarter: UDUtils
+    class Testing: UDUtils
     {
         private static void Main(string[] args)
         {

@@ -25,7 +25,7 @@ namespace MagmaMc.UAA
         /// <summary>
         /// The base URL of the Magma's Universal Accounts API.
         /// </summary>
-        public const string APIPath      = "http://www.magma-mc.net:5555/Accounts/API/";
+        public const string APIPath = "http://www.magma-mc.net:5555/Accounts/API/";
 
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace MagmaMc.UAA
     /// <summary>
     /// 
     /// </summary>
-    public class APIData: Dictionary<string, string>
+    public class APIData : Dictionary<string, string>
     {
         public static explicit operator APIData(JsonElement Input)
         {
@@ -133,7 +133,7 @@ namespace MagmaMc.UAA
             HttpResponseMessage Response = Client.GetAsync(Path + ToQueryString(Input)).GetAwaiter().GetResult();
             Client.Dispose();
             if (Response.IsSuccessStatusCode)
-                return (Response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+                return Response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             else return null;
         }
 
@@ -147,7 +147,8 @@ namespace MagmaMc.UAA
             try
             {
                 return (UserData)JsonSerializer.Deserialize<JsonElement>(Data);
-            } catch
+            }
+            catch
             {
                 try
                 {
@@ -160,7 +161,7 @@ namespace MagmaMc.UAA
             }
 
         }
-            
+
 
 
 

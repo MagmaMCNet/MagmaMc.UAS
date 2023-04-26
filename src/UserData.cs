@@ -33,7 +33,7 @@ namespace MagmaMc.UAA
             return Data;
         }
     }
-    public class UserData: IUserData
+    public class UserData : IUserData
     {
         public UserData() { }
         public UserData(string username, string password)
@@ -60,13 +60,13 @@ namespace MagmaMc.UAA
         /// </summary>
         /// <param name="UserData"></param>
         /// <returns></returns>
-        public static string GetToken(APIData UserData) => 
+        public static string GetToken(APIData UserData) =>
             CallAPI(APIEndPoints.Token, UserData);
 
-        public static UserData GetUserData(APIData UserData) => 
+        public static UserData GetUserData(APIData UserData) =>
             ToUserData(CallAPI(APIEndPoints.UserData, UserData));
 
-        public static UserData GetUserData(string Token) => 
+        public static UserData GetUserData(string Token) =>
             ToUserData(CallAPI(APIEndPoints.UserData, new APIData() { { "Token", Token } }));
 
         public static UserData Read()
@@ -109,7 +109,7 @@ namespace MagmaMc.UAA
         {
             CallAPI(APIEndPoints.CustomData, new APIData() { { "DevToken", DevToken }, { "Token", Token }, { "Filename", Filename }, { "Data", Data } });
         }
-        
+
         public void Save()
         {
             if (!Directory.Exists(Folder))
