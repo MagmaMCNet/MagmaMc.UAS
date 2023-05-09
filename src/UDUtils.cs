@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web;
 
-namespace MagmaMc.UAA
+namespace MagmaMc.UAS
 {
     /// <summary>
     /// Magma's Universal Accounts API Paths
@@ -52,6 +46,38 @@ namespace MagmaMc.UAA
         /// This endpoint is used to create custom application userdata
         /// </summary>
         public const string CustomData = APIPath + "CustomData.php";
+    }
+    /// <summary>
+    /// A Simple Web Response That Can Be Converted From Or To a string
+    /// </summary>
+    /// 
+    public class APIResponse
+    {
+        public string Message { get; set; }
+        public bool Success { get; set; }
+        public ushort ResponseCode { get; set; }
+        public APIResponse() { }
+        public APIResponse(string Message, bool Successful)
+        {
+            Success = Successful;
+            this.Message = Message;
+        }
+
+        public static implicit operator APIResponse(string Input)
+        {
+            if (Input == null)
+                return new APIResponse("", false);
+            if (Input.ToLower().StartsWith("invalid") || Input.ToLower().StartsWith("fail"))
+                return new APIResponse(Input, false);
+            else
+                return new APIResponse(Input, true);
+        }
+
+        public static implicit operator string(APIResponse Input) =>
+            Input.Message;
+
+        public override string ToString() => Message;
+
     }
     /// <summary>
     /// 
@@ -127,14 +153,26 @@ namespace MagmaMc.UAA
         /// <param name="Path"></param>
         /// <param name="Input"></param>
         /// <returns></returns>
-        public static string CallAPI(string Path, APIData Input)
+        public static APIResponse CallAPI(string Path, APIData Input)
         {
             HttpClient Client = new HttpClient();
-            HttpResponseMessage Response = Client.GetAsync(Path + ToQueryString(Input)).GetAwaiter().GetResult();
-            Client.Dispose();
-            if (Response.IsSuccessStatusCode)
-                return Response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            else return null;
+            Client.Timeout = TimeSpan.FromSeconds(10);
+            Client.MaxResponseContentBufferSize = 1048576; // 1MB
+
+            try
+            {
+                
+                HttpResponseMessage Response = Client.GetAsync(Path + ToQueryString(Input)).GetAwaiter().GetResult();
+                APIResponse APIResponse = new APIResponse(Response.Content.ReadAsStringAsync().GetAwaiter().GetResult(), Response.IsSuccessStatusCode);
+                APIResponse.ResponseCode = (ushort)Response.StatusCode;
+                Client.Dispose();
+                return APIResponse;
+            }
+            catch
+            {
+                Client.Dispose();
+                return new APIResponse() { Message = "", ResponseCode = 444, Success = false };
+            }
         }
 
         /// <summary>

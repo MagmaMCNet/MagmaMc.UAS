@@ -4,7 +4,6 @@ a NuGet package Used For Creating Login And Storing UserData Securely
 
 originally made for private use but has been released to the public for use,
 
-
 ## Updates
 
 | Code Name | Name            | Completed             |
@@ -12,5 +11,4 @@ originally made for private use but has been released to the public for use,
 | 683c7     | Server Security | :white_check_mark:    |
 | 80e0e     | Client Security | :white_check_mark:    |
 | ed653     | Custom UserData | :white_check_mark:    |
-| 96369     | Login Form      | :construction_worker: |
-| 5d242     | SignUp Form     | :x:                   |
+| 96369     | Login Form      | :white_check_mark:    |

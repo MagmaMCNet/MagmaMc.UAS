@@ -7,14 +7,16 @@ using System.Text.Json;
 using System.IO;
 using MagmaMc.MagmaSimpleConfig;
 using static MagmaMc.JEF.JEF;
-using static MagmaMc.UAA.UDUtils;
+using static MagmaMc.UAS.UDUtils;
+using System.Runtime.ConstrainedExecution;
+using System.Security;
 
-namespace MagmaMc.UAA
+namespace MagmaMc.UAS
 {
     public abstract class IUserData
     {
         public static string Filename { get; } = Folder + "Auth.db";
-        public static string Folder { get; } = Utils.Folders.LocalUserAppData + "\\MagmaMc\\UAA\\";
+        public static string Folder { get; } = Utils.Folders.LocalUserAppData + "\\MagmaMc\\UAS\\";
         public string Username { get; set; }
         public string Email { get; set; }
         public string Icon { get; set; }
@@ -29,10 +31,13 @@ namespace MagmaMc.UAA
             Data.Email = Input.GetProperty("Email").ToString();
             Data.Password = Input.GetProperty("Password").ToString();
             Data.Icon = Input.GetProperty("Icon").ToString();
-            Data.Authorisation = CallAPI(APIEndPoints.Token, (APIData)Data);
+            Data.Authorisation = CallAPI(APIEndPoints.Token, (APIData)Data).Message;
             return Data;
         }
     }
+
+
+
     public class UserData : IUserData
     {
         public UserData() { }
@@ -50,6 +55,7 @@ namespace MagmaMc.UAA
         /// <summary>
         /// Allows Comparing A Token And Checking if it is valid
         /// </summary>
+        /// 
         /// <param name="Token"></param>
         /// <returns></returns>
         public static bool ValidToken(string Token) =>
@@ -58,16 +64,17 @@ namespace MagmaMc.UAA
         /// <summary>
         /// Generates A Token From UserData
         /// </summary>
+        /// 
         /// <param name="UserData"></param>
         /// <returns></returns>
         public static string GetToken(APIData UserData) =>
-            CallAPI(APIEndPoints.Token, UserData);
+            CallAPI(APIEndPoints.Token, UserData).Message;
 
         public static UserData GetUserData(APIData UserData) =>
-            ToUserData(CallAPI(APIEndPoints.UserData, UserData));
+            ToUserData(CallAPI(APIEndPoints.UserData, UserData).Message);
 
         public static UserData GetUserData(string Token) =>
-            ToUserData(CallAPI(APIEndPoints.UserData, new APIData() { { "Token", Token } }));
+            ToUserData(CallAPI(APIEndPoints.UserData, new APIData() { { "Token", Token } }).Message);
 
         public static UserData Read()
         {
@@ -93,7 +100,7 @@ namespace MagmaMc.UAA
         /// <param name="Token">Access token to use for authentication.</param>
         /// <param name="Filename">Name of the file to retrieve custom data for.</param>
         /// <returns>A string containing the custom data for the specified file.</returns>
-        public static string GetCustomData(string DevToken, string Token, string Filename)
+        public static APIResponse GetCustomData(string DevToken, string Token, string Filename)
         {
             return CallAPI(APIEndPoints.CustomData, new APIData() { { "DevToken", DevToken }, { "Token", Token }, { "Filename", Filename } });
         }
@@ -105,11 +112,14 @@ namespace MagmaMc.UAA
         /// <param name="Token">Access token to use for authentication.</param>
         /// <param name="Filename">Name of the file to set custom data for.</param>
         /// <param name="Data">Custom data to set for the specified file.</param>
-        public static void SetCustomData(string DevToken, string Token, string Filename, string Data)
+        public static APIResponse SetCustomData(string DevToken, string Token, string Filename, string Data)
         {
-            CallAPI(APIEndPoints.CustomData, new APIData() { { "DevToken", DevToken }, { "Token", Token }, { "Filename", Filename }, { "Data", Data } });
+            return CallAPI(APIEndPoints.CustomData, new APIData() { { "DevToken", DevToken }, { "Token", Token }, { "Filename", Filename }, { "Data", Data } });
         }
 
+        /// <summary>
+        /// A Way To Save UserData
+        /// </summary>
         public void Save()
         {
             if (!Directory.Exists(Folder))
