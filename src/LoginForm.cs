@@ -119,10 +119,15 @@ namespace MagmaMc.UAS
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-
+            UserData UD = UserData.Read();
+            if (UD != null)
+            {
+                UD = UserData.GetUserData(UD.Authorisation);
+                UD_Email.Text = UD.Email;
+            }
         }
 
-        private void createacccount_Link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void CreateAcccount_Link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.UseShellExecute = true;
@@ -132,7 +137,18 @@ namespace MagmaMc.UAS
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-
+            UserData UD = new UserData();
+            UD.Username = Username_Input.Text;
+            UD.Password = Password_Input.Text;
+            if (UD.ValidLogin())
+            {
+                UserData.GetUserData((APIData)UD).Save();
+                Hide();
+                Dispose();
+                Close();
+            }
+            else
+                MessageBox.Show("Username Or Password Is Incorrect", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

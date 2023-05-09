@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MagmaMc.UAS;
+#pragma warning disable CS0162
 
 namespace MagmaMc.UAS.Test
 {
@@ -14,7 +15,6 @@ namespace MagmaMc.UAS.Test
         const ushort TestLength = 64;
         const string ExampleUserToken = "fe909f4a6c3005b768ab5bbd50b80194ab613eba.dGVzdGFjY291bnQ.29ac470ea9668ed5fb090e4612926968";
         const string ExampleDevToken = "08f7daf58cd18f17bb5f0587b616534cc2b33b72.8aedfbd3d5ed506a34602d29fbdfdfb8";
-
         private static void Main(string[] args)
         {
             if (FormTesting)

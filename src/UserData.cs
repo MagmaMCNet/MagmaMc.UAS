@@ -15,13 +15,13 @@ namespace MagmaMc.UAS
 {
     public abstract class IUserData
     {
-        public static string Filename { get; } = Folder + "Auth.db";
         public static string Folder { get; } = Utils.Folders.LocalUserAppData + "\\MagmaMc\\UAS\\";
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Icon { get; set; }
-        public string Password { get; set; }
-        public string Authorisation { get; set; }
+        public static string Filename { get; } = Folder + "Auth.db";
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string Authorisation { get; set; } = string.Empty;
 
 
         public static explicit operator IUserData(JsonElement Input)
@@ -52,23 +52,55 @@ namespace MagmaMc.UAS
             Password = password;
             Email = email;
         }
+
         /// <summary>
         /// Allows Comparing A Token And Checking if it is valid
         /// </summary>
-        /// 
         /// <param name="Token"></param>
         /// <returns></returns>
         public static bool ValidToken(string Token) =>
             GetUserData(Token) != null;
 
         /// <summary>
+        /// Allows Comparing A User Login And Checking if it is valid
+        /// </summary>
+        /// <param name="Username"></param>
+        /// <param name="Password"></param>
+        /// <returns></returns>
+        public static bool ValidLogin(string Username, string Password) =>
+            CallAPI(APIEndPoints.Token, (APIData)new UserData(Username, Password)).Success;
+
+        /// <summary>
+        /// Allows Comparing A User Login And Checking if it is valid
+        /// </summary>
+        /// <param name="UserData"></param>
+        /// <returns></returns>
+        public static bool ValidLogin(UserData UD) =>
+            CallAPI(APIEndPoints.Token, (APIData)UD).Success;
+
+
+        /// <summary>
+        /// Allows Comparing A User Login And Checking if it is valid
+        /// </summary>
+        /// <returns></returns>
+        public bool ValidLogin() =>
+            CallAPI(APIEndPoints.Token, (APIData)this).Success;
+
+        /// <summary>
         /// Generates A Token From UserData
         /// </summary>
-        /// 
         /// <param name="UserData"></param>
         /// <returns></returns>
         public static string GetToken(APIData UserData) =>
             CallAPI(APIEndPoints.Token, UserData).Message;
+
+        /// <summary>
+        /// Generates A Token From UserData
+        /// </summary>
+        /// <param name="UserData"></param>
+        /// <returns></returns>
+        public string GetToken() =>
+            CallAPI(APIEndPoints.Token, (APIData)this).Message;
 
         public static UserData GetUserData(APIData UserData) =>
             ToUserData(CallAPI(APIEndPoints.UserData, UserData).Message);
@@ -124,11 +156,11 @@ namespace MagmaMc.UAS
         {
             if (!Directory.Exists(Folder))
                 Directory.CreateDirectory(Folder);
-
+            if (!File.Exists(Filename)) File.WriteAllText(Filename, "");
             SimpleConfig Data = new SimpleConfig(Filename);
             File.AppendAllText(Filename, "");
             File.AppendAllText(Filename, "[Config]\r\n// WARNING -- Do Not Share Your Authorisation Token -- WARNING\r\n");
-            Data.SetValue("Authorisation", "", "Config");
+            Data.SetValue("Authorisation", Authorisation, "Config");
             Data.SetValue("Username", Username, "Config");
             Data.SetValue("Email", Email, "Config");
             Data.SetValue("Icon", Icon, "Config");

@@ -87,6 +87,7 @@
             this.UD_Email.Name = "UD_Email";
             this.UD_Email.Size = new System.Drawing.Size(221, 22);
             this.UD_Email.TabIndex = 1;
+            this.UD_Email.Text = "t";
             this.UD_Email.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // UD_Icon
@@ -228,7 +229,7 @@
             this.createacccount_Link.TabIndex = 11;
             this.createacccount_Link.TabStop = true;
             this.createacccount_Link.Text = "Account.php";
-            this.createacccount_Link.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.createacccount_Link_LinkClicked);
+            this.createacccount_Link.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.CreateAcccount_Link_LinkClicked);
             // 
             // Login_Progress
             // 

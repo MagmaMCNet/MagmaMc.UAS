@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Permissions;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -43,7 +44,7 @@ namespace MagmaMc.UAS
         public const string Create = APIPath + "Create.php";
 
         /// <summary>
-        /// This endpoint is used to create custom application userdata
+        /// This endpoint is used to create custom application user data
         /// </summary>
         public const string CustomData = APIPath + "CustomData.php";
     }
@@ -190,7 +191,7 @@ namespace MagmaMc.UAS
             {
                 try
                 {
-                    return (UserData)JsonSerializer.Deserialize<JsonElement>(RemoveHTML(Data));
+                    return (UserData)JsonSerializer.Deserialize<JsonElement>(Data);
                 }
                 catch
                 {
@@ -208,10 +209,10 @@ namespace MagmaMc.UAS
         /// </summary>
         /// <param name="html"></param>
         /// <returns></returns>
-        public static string RemoveHTML(string html)
-        {
-            return Regex.Replace(html, @"<script\b[^<]*(?:(?!</script>)<[^<]*)*</script>", string.Empty);
-        }
+        [Obsolete("Redundant due to the fact the website no longer returns the tag '<script>'", false)]
+        public static string RemoveHTML(string html) => html; 
+            //Regex.Replace(html, @"<script\b[^<]*(?:(?!</script>)<[^<]*)*</script>", string.Empty);
+
         public static readonly JsonSerializerOptions Options = new JsonSerializerOptions()
         {
             AllowTrailingCommas = true,
