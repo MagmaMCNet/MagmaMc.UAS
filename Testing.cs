@@ -20,7 +20,7 @@ namespace MagmaMc.UAS.Test
             if (FormTesting)
             {
                 Application.EnableVisualStyles();
-                Application.Run(new LoginForm());
+                LoginForm.Login(true);
                 return;
             }
             Console.Title = "BenchMarking API Response Time";

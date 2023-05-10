@@ -87,7 +87,6 @@
             this.UD_Email.Name = "UD_Email";
             this.UD_Email.Size = new System.Drawing.Size(221, 22);
             this.UD_Email.TabIndex = 1;
-            this.UD_Email.Text = "t";
             this.UD_Email.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // UD_Icon
@@ -275,7 +274,7 @@
             this.MinimizeBox = false;
             this.Name = "LoginForm";
             this.RightToLeftLayout = true;
-            this.Text = "UserForm";
+            this.Text = "MagmaMc.UAS - Login";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.LoginForm_Load);
             this.betterPanel1.ResumeLayout(false);

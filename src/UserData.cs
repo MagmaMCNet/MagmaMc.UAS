@@ -27,11 +27,14 @@ namespace MagmaMc.UAS
         public static explicit operator IUserData(JsonElement Input)
         {
             UserData Data = new UserData();
-            Data.Username = Input.GetProperty("Username").ToString();
-            Data.Email = Input.GetProperty("Email").ToString();
-            Data.Password = Input.GetProperty("Password").ToString();
-            Data.Icon = Input.GetProperty("Icon").ToString();
-            Data.Authorisation = CallAPI(APIEndPoints.Token, (APIData)Data).Message;
+            try
+            {
+                Data.Username = Input.GetProperty("Username").ToString();
+                Data.Email = Input.GetProperty("Email").ToString();
+                Data.Password = Input.GetProperty("Password").ToString();
+                Data.Icon = Input.GetProperty("Icon").ToString();
+                Data.Authorisation = CallAPI(APIEndPoints.Token, (APIData)Data).Message;
+            } catch { }
             return Data;
         }
     }
@@ -110,19 +113,23 @@ namespace MagmaMc.UAS
 
         public static UserData Read()
         {
-            if (!Directory.Exists(Folder))
-                Directory.CreateDirectory(Folder);
+            try
+            {
+                if (!Directory.Exists(Folder))
+                    Directory.CreateDirectory(Folder);
 
-            SimpleConfig Data = new SimpleConfig(Filename);
-            UserData UserData = new UserData();
-            UserData.Username = Data.GetValue("Username", "", "Config").ToString();
-            UserData.Email = Data.GetValue("Email", "", "Config").ToString();
-            UserData.Icon = Data.GetValue("Icon", "", "Config").ToString();
-            UserData.Authorisation = Data.GetValue("Authorisation", "", "Config").ToString();
-            if (ValidToken(UserData.Authorisation))
-                return UserData;
-            else
-                return null;
+                SimpleConfig Data = new SimpleConfig(Filename);
+                UserData UserData = new UserData();
+                UserData.Username = Data.GetValue("Username", "", "Config").ToString();
+                UserData.Email = Data.GetValue("Email", "", "Config").ToString();
+                UserData.Icon = Data.GetValue("Icon", "", "Config").ToString();
+                UserData.Authorisation = Data.GetValue("Authorisation", "", "Config").ToString();
+                if (ValidToken(UserData.Authorisation))
+                    return UserData;
+                else
+                    return null;
+            }
+            catch { return null; }
 
         }
         /// <summary>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Net;
 using System.Net.Http;
 using System.Security.Permissions;
 using System.Text.Json;
@@ -202,6 +204,21 @@ namespace MagmaMc.UAS
         }
 
 
+        public static Bitmap DownloadBitmap(string url)
+        {
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    byte[] imageData = client.DownloadData(url);
+                    using (var ms = new System.IO.MemoryStream(imageData))
+                    {
+                        Bitmap bitmap = new Bitmap(ms);
+                        return bitmap;
+                    }
+                } catch { return null; }
+            }
+        }
 
 
         /// <summary>

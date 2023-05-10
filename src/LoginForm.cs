@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,6 +15,13 @@ namespace MagmaMc.UAS
 {
     public partial class LoginForm: Form
     {
+        public static void Login(bool wait)
+        {
+            if (!wait)
+                new LoginForm().Show();
+            else
+                new LoginForm().ShowDialog();
+        }
         public LoginForm()
         {
             InitializeComponent();
@@ -119,12 +127,31 @@ namespace MagmaMc.UAS
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            UserData UD = UserData.Read();
-            if (UD != null)
+            LoadingGIF.Visible = true;
+            new Thread(() =>
             {
-                UD = UserData.GetUserData(UD.Authorisation);
-                UD_Email.Text = UD.Email;
-            }
+                UserData UD = UserData.Read();
+                if (UD != null)
+                {
+                    UD = UserData.GetUserData(UD.Authorisation);
+                    Bitmap icon = UDUtils.DownloadBitmap("https://" + UD.Icon);
+                    BeginInvoke(new Action(() =>
+                    {
+                        UD_Email.Text = UD.Email;
+                        UD_Icon.Image = icon;
+                        LoginButton.Text = "Logout";
+                        LoadingGIF.Visible = false;
+                    }));
+                }
+                else
+                {
+
+                    BeginInvoke(new Action(() =>
+                    {
+                        LoadingGIF.Visible = false;
+                    }));
+                }
+            }).Start();
         }
 
         private void CreateAcccount_Link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -137,18 +164,37 @@ namespace MagmaMc.UAS
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            UserData UD = new UserData();
-            UD.Username = Username_Input.Text;
-            UD.Password = Password_Input.Text;
-            if (UD.ValidLogin())
+            LoadingGIF.Visible = true;
+            if (LoginButton.Text == "Logout" )
             {
-                UserData.GetUserData((APIData)UD).Save();
-                Hide();
-                Dispose();
-                Close();
-            }
-            else
-                MessageBox.Show("Username Or Password Is Incorrect", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                UD_Email.Text = "";
+                UD_Icon.Image = null;
+                File.Delete(UserData.Filename);
+                LoginButton.Text = "Login";
+                LoadingGIF.Visible = false;
+                Refresh();
+                return;
+            } 
+            new Thread(() =>
+            {
+                UserData UD = new UserData();
+                UD.Username = Username_Input.Text;
+                UD.Password = Password_Input.Text;
+                bool vaild = UD.ValidLogin();
+                BeginInvoke(new Action(() =>
+                {
+                    LoadingGIF.Visible = false;
+                    if (vaild)
+                    {
+                        UserData.GetUserData((APIData)UD).Save();
+                        Hide();
+                        Dispose();
+                        Close();
+                    }
+                    else
+                        MessageBox.Show("Username Or Password Is Incorrect", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
+            }).Start();
         }
     }
 }
