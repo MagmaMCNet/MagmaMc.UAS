@@ -10,6 +10,7 @@ using static MagmaMc.JEF.JEF;
 using static MagmaMc.UAS.UDUtils;
 using System.Runtime.ConstrainedExecution;
 using System.Security;
+using System.Security.Permissions;
 
 namespace MagmaMc.UAS
 {
@@ -43,6 +44,17 @@ namespace MagmaMc.UAS
 
     public class UserData : IUserData
     {
+        /// <summary>
+        /// Creates A Login Form For The User To Login To
+        /// </summary>
+        /// <param name="wait"></param>
+        public static void Login(bool wait = true)
+        {
+            if (!wait)
+                new LoginForm().Show();
+            else
+                new LoginForm().ShowDialog();
+        }
         public UserData() { }
         public UserData(string username, string password)
         {
@@ -63,6 +75,14 @@ namespace MagmaMc.UAS
         /// <returns></returns>
         public static bool ValidToken(string Token) =>
             GetUserData(Token) != null;
+
+        /// <summary>
+        /// Allows Comparing A Token And Checking if it is valid
+        /// </summary>
+        /// <param name="Token"></param>
+        /// <returns></returns>
+        public bool ValidToken() =>
+            GetUserData(Authorisation) != null;
 
         /// <summary>
         /// Allows Comparing A User Login And Checking if it is valid
@@ -111,6 +131,11 @@ namespace MagmaMc.UAS
         public static UserData GetUserData(string Token) =>
             ToUserData(CallAPI(APIEndPoints.UserData, new APIData() { { "Token", Token } }).Message);
 
+        /// <summary>
+        /// Reads The Current Logged In UserData
+        /// </summary>
+        ///  <exception cref="NullReferenceException"></exception>
+        /// <returns></returns>
         public static UserData Read()
         {
             try
@@ -159,7 +184,7 @@ namespace MagmaMc.UAS
         /// <summary>
         /// A Way To Save UserData
         /// </summary>
-        public void Save()
+        internal void Save()
         {
             if (!Directory.Exists(Folder))
                 Directory.CreateDirectory(Folder);

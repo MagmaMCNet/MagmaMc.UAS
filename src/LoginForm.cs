@@ -13,15 +13,8 @@ using System.Windows.Forms;
 
 namespace MagmaMc.UAS
 {
-    public partial class LoginForm: Form
+    internal partial class LoginForm: Form
     {
-        public static void Login(bool wait)
-        {
-            if (!wait)
-                new LoginForm().Show();
-            else
-                new LoginForm().ShowDialog();
-        }
         public LoginForm()
         {
             InitializeComponent();

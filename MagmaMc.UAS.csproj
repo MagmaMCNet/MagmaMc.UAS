@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworkS>net462;net6.0-windows</TargetFrameworkS>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
@@ -11,8 +11,8 @@
     
     <AssemblyVersion>0.1.0.0</AssemblyVersion>
     <Version>0.1.0</Version>
-    <PackageVersion>0.1.0-Beta1</PackageVersion>
-    
+    <PackageVersion>0.1.0</PackageVersion>
+    <PackageProjectUrl>https://accounts.magma-mc.net</PackageProjectUrl>
     <PackageLicenseFile>.\LICENSE.txt</PackageLicenseFile>
     <Title>Magma's Universal Account System</Title>
     <Company>MagmaMc</Company>

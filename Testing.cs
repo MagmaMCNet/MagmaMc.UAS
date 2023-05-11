@@ -11,7 +11,7 @@ namespace MagmaMc.UAS.Test
 {
     class Testing: UDUtils
     {
-        const bool FormTesting = true;
+        const bool FormTesting = false;
         const ushort TestLength = 64;
         const string ExampleUserToken = "fe909f4a6c3005b768ab5bbd50b80194ab613eba.dGVzdGFjY291bnQ.29ac470ea9668ed5fb090e4612926968";
         const string ExampleDevToken = "08f7daf58cd18f17bb5f0587b616534cc2b33b72.8aedfbd3d5ed506a34602d29fbdfdfb8";
@@ -20,7 +20,7 @@ namespace MagmaMc.UAS.Test
             if (FormTesting)
             {
                 Application.EnableVisualStyles();
-                LoginForm.Login(true);
+                UserData.Login(true);
                 return;
             }
             Console.Title = "BenchMarking API Response Time";
