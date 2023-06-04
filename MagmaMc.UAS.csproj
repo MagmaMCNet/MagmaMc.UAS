@@ -2,16 +2,16 @@
 
   <PropertyGroup>
     <TargetFrameworkS>net462;net6.0-windows</TargetFrameworkS>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <PropertyGroup>
     <AssemblyName>MagmaMc.UAS</AssemblyName>
     
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <Version>0.1.0</Version>
-    <PackageVersion>0.1.0</PackageVersion>
+    <AssemblyVersion>0.1.1.0</AssemblyVersion>
+    <Version>0.1.1</Version>
+    <PackageVersion>0.1.1-A1</PackageVersion>
     <PackageProjectUrl>https://accounts.magma-mc.net</PackageProjectUrl>
     <PackageLicenseFile>.\LICENSE.txt</PackageLicenseFile>
     <Title>Magma's Universal Account System</Title>
@@ -27,6 +27,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageIcon>AUS.png</PackageIcon>
+    <PackageReleaseNotes>Updated To Support MagmaSimpleConfig 2.0.0+</PackageReleaseNotes>
   
   </PropertyGroup>
   
@@ -34,7 +35,7 @@
   <ItemGroup>
     <PackageReference Include="MagmaMc.BetterForms" Version="0.3.3" />
     <PackageReference Include="MagmaMc.JEF" Version="4.0.1" />
-    <PackageReference Include="MagmaMc.MagmaSimpleConfig" Version="1.0.0" />
+    <PackageReference Include="MagmaMc.MagmaSimpleConfig" Version="2.0.1" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 

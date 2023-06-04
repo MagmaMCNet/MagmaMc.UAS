@@ -16,13 +16,14 @@ namespace MagmaMc.UAS
     public readonly struct APIEndPoints
     {
         /// <summary>
-        /// The base URL of the Magma's Universal Accounts API. PROXY
+        /// The base URL of the Magma's Universal Accounts API. 
         /// </summary>
-        public const string APIPathProxy = "https://accounts.magma-mc.net/API/";
+        public const string APIPath = "https://accounts.magma-mc.net/API/";
+
         /// <summary>
-        /// The base URL of the Magma's Universal Accounts API.
+        /// The base URL of the Magma's Universal Accounts API. Backup
         /// </summary>
-        public const string APIPath = "http://www.magma-mc.net:5555/Accounts/API/";
+        public const string APIPathBackup = "http://ipv4.magma-mc.net:5555/Accounts/API/";
 
 
         /// <summary>

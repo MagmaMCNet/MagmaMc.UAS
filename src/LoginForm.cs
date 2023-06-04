@@ -95,7 +95,7 @@ namespace MagmaMc.UAS
                 {
                     try
                     {
-                        bool Allow = (UDUtils.CallAPI(APIEndPoints.APIPathProxy, null).Success);
+                        bool Allow = (UDUtils.CallAPI(APIEndPoints.APIPathBackup, null).Success);
                         if (Failed > 15)
                             if (DialogResult.Cancel == MessageBox.Show("Failed To Connect To Remote UserData Servers", "https://accounts.magma-mc.net/API/", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)) Environment.Exit(0); else Failed = 0;
                         if (!Allow)

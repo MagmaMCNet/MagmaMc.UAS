@@ -145,10 +145,10 @@ namespace MagmaMc.UAS
 
                 SimpleConfig Data = new SimpleConfig(Filename);
                 UserData UserData = new UserData();
-                UserData.Username = Data.GetValue("Username", "", "Config").ToString();
-                UserData.Email = Data.GetValue("Email", "", "Config").ToString();
-                UserData.Icon = Data.GetValue("Icon", "", "Config").ToString();
-                UserData.Authorisation = Data.GetValue("Authorisation", "", "Config").ToString();
+                UserData.Username = Data.GetValue("Username", "Config", "");
+                UserData.Email = Data.GetValue("Email", "Config", "");
+                UserData.Icon = Data.GetValue("Icon", "Config", "");
+                UserData.Authorisation = Data.GetValue("Authorisation", "Config", "");
                 if (ValidToken(UserData.Authorisation))
                     return UserData;
                 else
